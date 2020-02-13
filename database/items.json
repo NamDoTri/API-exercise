@@ -1,0 +1,16 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "title": "Bike",
+            "description": "Used, in good condition",
+            "category": "Bicycles",
+            "location": "Oulu",
+            "images": "some images",
+            "price": 200,
+            "datePosted": "2020-02-13T09:56:30.142Z",
+            "deliveryType": "Pickup",
+            "seller": "john123"
+        }
+    ]
+}
