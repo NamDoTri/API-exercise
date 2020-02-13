@@ -1,13 +1,15 @@
-export default class Item{ 
-    constructor(){
-        this.title;
-        this.description;
-        this.category;
-        this.location;
-        this.images;
-        this.price;
-        this.datePosted;
-        this.deliveryType;
-        this.seller;
+class Item{ 
+    constructor(title, desc, category, location, images, price, date, deliveryType, sellerName){
+        this.title = title;
+        this.description = desc;
+        this.category = category;
+        this.location = location;
+        this.images = images;
+        this.price = price;
+        this.datePosted = date;
+        this.deliveryType = deliveryType;
+        this.seller = sellerName;
     }
 }
+
+module.exports = Item;
