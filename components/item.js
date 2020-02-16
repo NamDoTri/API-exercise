@@ -22,7 +22,7 @@ router.get('/:id(\d+)', (req, res) =>{ //number only
     res.json(item);
 });
 
-router.get('/search', (req, res)=>{
+router.get('/search', (req, res, next)=>{
     let result;  
     switch(req.query.type.toLowerCase()){
         case "category": 
@@ -36,10 +36,14 @@ router.get('/search', (req, res)=>{
             result = items.filter(item => item.datePosted == searchDate);
             break;
         default: 
-            res.send("Invalid search type")
+            res.send("Invalid search type");
             break;
     }
-    res.json( (result.length != 0) ? result : "No entries found.");
+    if(result && result.length != 0){
+        res.json(result);
+    }else if(result){
+        res.send("No entries found.")
+    }
 });
 
 router.get('/', (req, res) =>{

@@ -21,7 +21,7 @@ let validateItem = (req, res, next) => {
     for(let prop of Object.keys(item)){
         if (!item[prop]){
             err.message = `${prop} is missing`;
-            res.send(err.message);
+            next(err.message);
         }
     }
 
