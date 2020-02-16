@@ -13,44 +13,8 @@ const db = new Event();
 let items = JSON.parse( fs.readFileSync(path) );
 
 // validators for request
-let validateJSONHeaders = (req, res, next) =>{
-    if(req.get('Content-Type') === 'application/json'){
-        next();
-    }
-    else{
-        let err = new Error('Bad Request - Missing Header');
-        err.status = 400;
-        next(err)
-    }
-}
-
-let validateItem = (req, res, next) => {
-    let err = new Error();
-    err.name = 'Bad Request';
-    err.status = 400;
-
-    let item = new Item(
-        items[items.length-1].id + 1, // latest id +1
-        req.body.title,
-        req.body.description,
-        req.body.category,
-        req.body.location,
-        req.body.images,
-        req.body.price,
-        new Date(),
-        req.body.deliveryType,
-        req.body.sellerName,
-    )
-    
-    for(let prop of Object.keys(item)){
-        if (!item[prop]){
-            err.message = `${prop} is missing`;
-            next(err);
-        }
-    }
-
-    next();
-}
+const validateJSONHeaders = require('../validators/HeaderValidator');
+const validateItem = require('../validators/ItemValidator');
 
 // TODO: delivery types enumerate object
 router.get('/:id(\d+)', (req, res) =>{ //number only
@@ -75,7 +39,7 @@ router.get('/search', (req, res)=>{
             res.send("Invalid search type")
             break;
     }
-    res.json(result.length!=0 ? result : "No entries found.");
+    res.json( (result.length != 0) ? result : "No entries found.");
 });
 
 router.get('/', (req, res) =>{
