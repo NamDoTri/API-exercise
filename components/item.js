@@ -77,7 +77,9 @@ router.post('/',
     }
 );
 
-router.put('/:id', (req, res)=>{
+router.put('/:id',
+    validateItem,
+    (req, res)=>{
     for(let item of items){
         if(item.id == req.params.id){
             item = {
