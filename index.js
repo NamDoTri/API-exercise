@@ -1,16 +1,17 @@
 const app = require('express')();
 const port = process.env.PORT || 3008;
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fs = require('fs');
 
+const ItemComponent = require('./components/item');
 
-// User: username and password
-// item: 
+app.use(bodyParser.json());
+app.use(cors());
 
+app.use('/items', ItemComponent);
 
-app.post('/post', (req, res)=>{
-    
-})
-
-app.get('/', (req, res)=>{
+app.get('/', (req, res)=>{    
     res.send("Hello!")
 })
 

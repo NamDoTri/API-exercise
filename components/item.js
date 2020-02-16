@@ -1,12 +1,16 @@
 // import necessary packages/modules
 const router = require('express').Router();
 const fs = require('fs');
+const Event = require('events');
 const Item = require('../models/Item')
 
 const path = './database/items.json';
 
+const db = new Event();
+
 // read item data
-let items = JSON.parse( fs.readFileSync(path) ).items;
+// TODO: make use of read stream
+let items = JSON.parse( fs.readFileSync(path) );
 
 // validators for request
 let validateJSONHeaders = (req, res, next) =>{
@@ -20,18 +24,31 @@ let validateJSONHeaders = (req, res, next) =>{
     }
 }
 
-let validateItem = () => {
-    let item = new Item();
+let validateItem = (req, res, next) => {
     let err = new Error();
     err.name = 'Bad Request';
     err.status = 400;
 
+    let item = new Item(
+        items[items.length-1].id + 1, // latest id +1
+        req.body.title,
+        req.body.description,
+        req.body.category,
+        req.body.location,
+        req.body.images,
+        req.body.price,
+        new Date(),
+        req.body.deliveryType,
+        req.body.sellerName,
+    )
+    
     for(let prop of Object.keys(item)){
         if (!item[prop]){
             err.message = `${prop} is missing`;
             next(err);
         }
     }
+
     next();
 }
 
@@ -68,20 +85,44 @@ router.post('/',
         res.status(201);
         res.json(newItem);
 
-        //write to JSON file
-        // fs.writeFile('../database/items.json', items, (err) =>{
-        //     if(err) console.log(err)
-        //     console.log('1 new item written.')
-        // })
+        db.emit('change', 'Item created.')
     }
 );
 
-// TODO: put request handler
+router.put('/:id', (req, res)=>{
+    for(let item of items){
+        if(item.id == req.params.id){
+            item = {
+                id: item.id,
+                ...req.body
+            }
+            items = items.map(i => (i.id == item.id) ? item : i )
+            res.send(item);
+            break;
+        }
+    };
+    db.emit('change', 'Item editted.');
+});
 
 router.delete('/:id', (req, res)=>{
     items = items.filter(i => i.id != req.params.id);
     res.sendStatus(200);
+    db.emit('change', 'Item deleted');
 })
+
+db.on('change', (e)=>{
+    saveChanges();
+    console.log(e);
+    items = JSON.parse( fs.readFileSync(path) );
+})
+
+let saveChanges = () =>{
+    let toWrite = JSON.stringify(items);
+    fs.writeFile(path, toWrite, (err)=>{
+        if(err) console.log(err);
+        console.log("Saved changes.");
+    });
+}
 
 module.exports = router;
 
