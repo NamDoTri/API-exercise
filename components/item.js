@@ -53,9 +53,29 @@ let validateItem = (req, res, next) => {
 }
 
 // TODO: delivery types enumerate object
-router.get('/:id', (req, res) =>{
+router.get('/:id(\d+)', (req, res) =>{ //number only
     let item = items.filter(i => i.id == req.params.id)[0];
     res.json(item);
+});
+
+router.get('/search', (req, res)=>{
+    let result;  
+    switch(req.query.type.toLowerCase()){
+        case "category": 
+            result = items.filter(item => item.category.toLowerCase() == req.query.keyword.toLowerCase());
+            break;
+        case "location": 
+            result = items.filter(item => item.location.toLowerCase() == req.query.keyword.toLowerCase());
+            break;
+        case "date": 
+            let searchDate = new Date( req.query.keyword )
+            result = items.filter(item => item.datePosted == searchDate);
+            break;
+        default: 
+            res.send("Invalid search type")
+            break;
+    }
+    res.json(result.length!=0 ? result : "No entries found.");
 });
 
 router.get('/', (req, res) =>{
