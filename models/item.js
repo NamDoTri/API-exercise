@@ -1,16 +1,24 @@
-class Item{ 
-    constructor(id, title, desc, category, location, images, price, date, deliveryType, sellerName){
-        this.id = id;
-        this.title = title;
-        this.description = desc;
-        this.category = category;
-        this.location = location;
-        this.images = images;
-        this.price = price;
-        this.datePosted = date;
-        this.deliveryType = deliveryType;
-        this.seller = sellerName;
-    }
-}
+const mongoose = require('mongoose');
 
-module.exports = Item;
+const schema = new mongoose.Schema({
+    title: String,
+    description: String,
+    category: String,
+    location: String,
+    images: [String],
+    askingPrice: Number,
+    dateOfPosting: Date,
+    deliveryType: {
+        type: String,
+        enum: ['Shipping', 'Pickup'],
+        default: 'Shipping'
+    },
+    seller: {
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "Seller"
+    }
+});
+
+const item = new mongoose.model('Item', schema);
+
+module.exports = item;
