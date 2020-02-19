@@ -1,4 +1,4 @@
-class Item{ 
+class Item{
     constructor(id, title, desc, category, location, images, price, date, deliveryType, sellerName){
         this.id = id;
         this.title = title;
