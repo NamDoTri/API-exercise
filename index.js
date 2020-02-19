@@ -7,6 +7,7 @@ const cp = require('cookie-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const passconfig = require("./config/passport");
+const log = console.log
 
 
 const setup = async () => {
@@ -25,10 +26,10 @@ const setup = async () => {
         app.use(bodyParser.json());
         app.use(cors());
         app.use((req,res,next) => {
-            if (req.body) log.info(req.body);
-            if (req.params) log.info(req.params);
-            if(req.query) log.info(req.query);
-            log.info(`Received a ${req.method} request from ${req.ip} for ${req.url}`);
+            if (req.body) log(req.body);
+            if (req.params) log(req.params);
+            if(req.query) log(req.query);
+            log(`Received a ${req.method} request from ${req.ip} for ${req.url}`);
             next();
         });
 
@@ -39,6 +40,9 @@ const setup = async () => {
         const UserRoute = require("./routes/user");
         app.use('/users', UserRoute);
 
+        app.get('/hi', passport.authenticate('jwt', {session: false}), (req, res) => {
+            res.send('hi');
+        })
         app.listen(port, () => {
             console.log(`Listening on port ${port}...`)
         });
