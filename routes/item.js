@@ -5,7 +5,7 @@ const Item = require('../models/Item');
 
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
-const validateItem = require('../validators/ItemValidator');
+
 
 // TODO: delivery types enumerate object
 router.get('/:id', async (req, res) => {
@@ -56,7 +56,6 @@ router.post('/',
 );
 
 router.put('/:id',
-    validateItem,
    async (req, res) => {
        try{
            const item = await Item.updateOne({id: req.params.id}, {...req.body});
