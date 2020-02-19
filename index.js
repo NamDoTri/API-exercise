@@ -14,10 +14,11 @@ const setup = async () => {
             useUnifiedTopology: true
         });
 
-        const ItemRoute = require('./routes/item');
 
         app.use(bodyParser.json());
         app.use(cors());
+        const ItemRoute = require('./routes/item');
+
 
         app.use('/items', ItemRoute);
 
@@ -34,4 +35,6 @@ const setup = async () => {
     }
 }
 
+
+setup();
 

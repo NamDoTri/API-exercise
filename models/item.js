@@ -13,9 +13,12 @@ const schema = new mongoose.Schema({
         enum: ['Shipping', 'Pickup'],
         default: 'Shipping'
     },
-    seller: mongoose.Schema.Types.ObjectID
+    seller: {
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "Seller"
+    }
 });
 
-const model = new mongoose.model('Item', schema);
+const item = new mongoose.model('Item', schema);
 
-module.exports = model;
+module.exports = item;
