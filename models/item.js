@@ -1,12 +1,24 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    title: String,
+    title: {
+        type: String,
+        required: true
+    },
     description: String,
-    category: String,
-    location: String,
+    category: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
     images: [String],
-    askingPrice: Number,
+    askingPrice: {
+        type: Number,
+        required: true
+    },
     dateOfPosting: Date,
     deliveryType: {
         type: String,
@@ -15,7 +27,8 @@ const schema = new mongoose.Schema({
     },
     seller: {
         type: mongoose.Schema.Types.ObjectID,
-        ref: "Seller"
+        ref: "User",
+        required: true
     }
 });
 
