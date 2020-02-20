@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
     },
     seller: {
         type: mongoose.Schema.Types.ObjectID,
-        ref: "Seller"
+        ref: "User"
     }
 });
 

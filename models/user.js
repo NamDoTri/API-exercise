@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+const itemSchema = new mongoose.Schema({
+    dateAdded: Date,
+    item: mongoose.Schema.Types.ObjectID
+});
 const schema = new mongoose.Schema({
     name: String,
     email: {
@@ -15,7 +19,8 @@ const schema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    items: [itemSchema]
 });
 
 const user = new mongoose.model('User', schema);
