@@ -23,7 +23,7 @@ router.get('/search', async (req, res, next) => {
 router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     let result;
     try {
-        if(req.params.id.toLowerCase() == 'all'){
+        if(!req.params.id || req.params.id.toLowerCase() == 'all'){
             result = await Item.find({});
             res.status(200).json({result});
         }else{
