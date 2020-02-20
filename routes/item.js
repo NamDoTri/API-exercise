@@ -1,7 +1,7 @@
 // import necessary packages/modules
 const router = require('express').Router();
 const Item = require('../models/Item');
-const fs = require('fs');
+const passport = require('passport');
 
 
 // validators for request
@@ -9,7 +9,7 @@ const validateJSONHeaders = require('../validators/HeaderValidator');
 
 
 // TODO: delivery types enumerate object
-router.get('/:id', async (req, res) => {
+router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         const item = await Item.findById(id);
         res.status(200).json(item);
@@ -26,7 +26,7 @@ router.get('/search', (req, res, next) => {
     }
 });
 
-router.get('/', async (req, res) =>{
+router.get('/', passport.authenticate('jwt', {session: false}), async (req, res) =>{
     try{
         const items = await Item.find({});
         res.status(200).json({items});
@@ -38,10 +38,7 @@ router.get('/', async (req, res) =>{
 
 });
 
-router.post('/',
-    [
-        validateJSONHeaders
-    ],
+router.post('/',passport.authenticate('jwt', {session: false}),
 
     async (req, res) => {
         try{
@@ -56,7 +53,7 @@ router.post('/',
     }
 );
 
-router.put('/:id',
+router.put('/:id',passport.authenticate('jwt', {session: false}),
    async (req, res) => {
        try{
            const item = await Item.updateOne({id: req.params.id}, {...req.body});
@@ -67,7 +64,7 @@ router.put('/:id',
        }
     });
 
-router.post('/bulk', async (req, res, next) => {
+router.post('/bulk', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     try{
 
         const items = req.body.items;
@@ -83,7 +80,7 @@ router.post('/bulk', async (req, res, next) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const item = await Item.deleteOne({id: req.params.id});
         res.status(202).json({item});
