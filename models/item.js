@@ -5,11 +5,14 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: String,
-    category: {
+    description: {
         type: String,
         required: true
     },
+    category: {
+    type: String,
+        required: true
+},
     location: {
         type: String,
         required: true
@@ -23,12 +26,13 @@ const schema = new mongoose.Schema({
     deliveryType: {
         type: String,
         enum: ['Shipping', 'Pickup'],
-        default: 'Shipping'
+        default: 'Shipping',
+        required: true
     },
     seller: {
+        required: true,
         type: mongoose.Schema.Types.ObjectID,
-        ref: "User",
-        required: true
+        ref: "User"
     }
 });
 
