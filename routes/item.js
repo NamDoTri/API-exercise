@@ -8,7 +8,6 @@ const passport = require('passport');
 const validateJSONHeaders = require('../validators/HeaderValidator');
 
 
-// TODO: delivery types enumerate object
 router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         const item = await Item.findById(id);
@@ -56,6 +55,7 @@ router.post('/',passport.authenticate('jwt', {session: false}),
 router.put('/:id',passport.authenticate('jwt', {session: false}),
    async (req, res) => {
        try{
+           //TODO Check if seller id matches the one saved in the item
            const item = await Item.updateOne({id: req.params.id}, {...req.body});
            res.status(202).json({item});
        }
@@ -82,6 +82,7 @@ router.post('/bulk', passport.authenticate('jwt', {session: false}), async (req,
 
 router.delete('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
+        //TODO Check if seller id matches the one saved in the item
         const item = await Item.deleteOne({id: req.params.id});
         res.status(202).json({item});
     }
