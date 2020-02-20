@@ -1,19 +1,36 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    title: String,
-    description: String,
-    category: String,
-    location: String,
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    category: {
+    type: String,
+        required: true
+},
+    location: {
+        type: String,
+        required: true
+    },
     images: [String],
-    askingPrice: Number,
+    askingPrice: {
+        type: Number,
+        required: true
+    },
     dateOfPosting: Date,
     deliveryType: {
         type: String,
         enum: ['Shipping', 'Pickup'],
-        default: 'Shipping'
+        default: 'Shipping',
+        required: true
     },
     seller: {
+        required: true,
         type: mongoose.Schema.Types.ObjectID,
         ref: "User"
     }
