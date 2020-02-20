@@ -1,6 +1,7 @@
 // import necessary packages/modules
 const router = require('express').Router();
 const Item = require('../models/Item');
+const fs = require('fs');
 
 
 // validators for request
@@ -65,6 +66,22 @@ router.put('/:id',
            res.status(500).send(err.message);
        }
     });
+
+router.post('/bulk', async (req, res, next) => {
+    try{
+
+        const items = req.body.items;
+
+        if(!items || Array.isArray(items)){
+            res.status(400).json({message: "Items missing or not an array"})
+        }
+        const item = await Item.collection.insertMany(items);
+        res.status(202).json({item});
+    }
+    catch(err){
+        res.status(500).send(err.message);
+    }
+})
 
 router.delete('/:id', async (req, res) => {
     try{
