@@ -1,6 +1,6 @@
 // import necessary packages/modules
 const router = require('express').Router();
-const Item = require('../models/Item');
+const Item = require('../models/item');
 const passport = require('passport');
 
 
