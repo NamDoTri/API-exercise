@@ -65,6 +65,9 @@ router.post('/',
         try{
             let images = [];
             req.files.forEach((f) => {
+                if(f.mimetype != "image/jpeg"){
+                    throw new Error("Invalid file format!")
+                }
                 fs.rename(f.path, './uploads/'+f.originalname, err => {
                     if(err) throw err;
                 });
