@@ -64,13 +64,12 @@ router.post('/',
     async (req, res) => {
         try{
             let images = [];
-            for(let i in req.files){
-                fs.rename(req.files[i].path, './uploads/'+req.files[i].originalName, err => {
+            req.files.forEach((f) => {
+                fs.rename(f.path, './uploads/'+f.originalname, err => {
                     if(err) throw err;
                 });
-                console.log('./uploads/'+req.files[i].originalName)
-                images.push('./uploads/'+req.files[i].originalName);
-            }
+                images.push('./uploads/'+f.originalname);
+            })
             const item = await Item.create({...req.body, images});
             res.status(202).json({item});
         }
