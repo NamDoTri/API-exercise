@@ -2,10 +2,22 @@
 const router = require('express').Router();
 const Item = require('../models/item');
 const passport = require('passport');
-
+const multer = require('multer');
+const fs = require("fs");
 
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, './uploads');
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.fieldname}-${Date.now()}.jpg` );
+    }
+});
+
+const upload = multer({storage: storage});
 
 router.get('/search', async (req, res, next) => {
   try {
@@ -46,13 +58,20 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
     }
 });
 
-router.post('/',passport.authenticate('jwt', {session: false}),
-    [
-        validateJSONHeaders
-    ],
+router.post('/',
+    passport.authenticate('jwt', {session: false}),
+    upload.array("images", 4),
     async (req, res) => {
         try{
-            const item = await Item.create({...req.body});
+            let images = [];
+            for(let i in req.files){
+                fs.rename(req.files[i].path, './uploads/'+req.files[i].originalName, err => {
+                    if(err) throw err;
+                });
+                console.log('./uploads/'+req.files[i].originalName)
+                images.push('./uploads/'+req.files[i].originalName);
+            }
+            const item = await Item.create({...req.body, images});
             res.status(202).json({item});
         }
         catch(err){
