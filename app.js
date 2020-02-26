@@ -7,19 +7,9 @@ const cp = require('cookie-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const passconfig = require("./config/passport");
-const log = console.log
 
 
 
-
-        mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        }).then(data => {
-            console.log("Mongo connection", data);
-        }).catch(err => {
-           console.log("Error in connecting to mondodb")
-        });
 
         //middlewares
         app.use(passport.initialize());
@@ -29,10 +19,10 @@ const log = console.log
         app.use(bodyParser.json());
         app.use(cors());
         app.use((req,res,next) => {
-            if (req.body) log(req.body);
-            if (req.params) log(req.params);
-            if(req.query) log(req.query);
-            log(`Received a ${req.method} request from ${req.ip} for ${req.url}`);
+            if (req.body) console.log(req.body);
+            if (req.params) console.log(req.params);
+            if(req.query) console.log(req.query);
+            console.log(`Received a ${req.method} request from ${req.ip} for ${req.url} with body`, req.body);
             next();
         });
 
@@ -48,4 +38,4 @@ const log = console.log
         })
 
 
-        module.exporta = app;
+        module.exports = app;

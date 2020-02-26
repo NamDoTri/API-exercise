@@ -32,7 +32,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
 
     }
     catch(err){
-        res.status(500).send(err.message);
+        res.status(500).json(err.message);
     }
 
 });
