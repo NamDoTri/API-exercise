@@ -99,4 +99,10 @@ it("Post request with auth", async done => {
     done()
 })
 
+it("Search", async done => {
+    const response = await request.get('/items/search?type=location&keyword=Oulu');
+    expect(response.status).toBe(200);
+    done()
+})
+
 
