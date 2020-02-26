@@ -16,9 +16,7 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "jest": "^25.1.0",
-    "nodemon": "^2.0.2",
-    "supertest": "^4.0.2"
+    "nodemon": "^2.0.2"
   },
   "scripts": {
     "start": "nodmeon index.js",
