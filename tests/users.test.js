@@ -25,3 +25,10 @@ it("login test", async done => {
     done()
 
 });
+
+it("register test", async done => {
+    const email = "test2", password = "test2", username = "test2";
+    const response = await request.post('/users/register').send({email, password, username});
+    expect(response.status).toBe(200);
+    done()
+})
