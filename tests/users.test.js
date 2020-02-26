@@ -1,15 +1,13 @@
-require('dotenv').config();
+
 const app = require('../app');
 const supertest = require('supertest');
 const request = supertest(app);
-const mongoose = require('mongoose');
+
+const {connect} = require("./utils");
 
 beforeAll(async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        await connect();
 
         console.log("Mongodb connection established");
     }
