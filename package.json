@@ -16,11 +16,12 @@
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
   },
   "scripts": {
-    "start": "nodmeon index.js",
-    "test": "jest"
+    "start": "node index.js",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -31,11 +32,5 @@
   "bugs": {
     "url": "https://github.com/NamDoTri/API-exercise/issues"
   },
-  "homepage": "https://github.com/NamDoTri/API-exercise#readme",
-  "jest": {
-    "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ]
-  }
+  "homepage": "https://github.com/NamDoTri/API-exercise#readme"
 }

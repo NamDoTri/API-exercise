@@ -1,6 +1,12 @@
-
-const app = require('../index');
 const request = require('supertest');
-it('Testing to see if Jest works', () => {
-    expect(1).toBe(2)
-})
+const app = require('../index');
+describe('Our server', function() {
+    it('should send back a JSON object with goodCall set to true', function() {
+        request(app)
+            .get('/index')
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expectSta
+    });
+
+});
