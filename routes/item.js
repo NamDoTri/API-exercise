@@ -7,19 +7,29 @@ const passport = require('passport');
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
 
-
-router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
-    try {
-        const item = await Item.findById(id);
-        res.status(200).json(item);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+router.get('/search', async (req, res, next) => {
+  try {
+      let filter = JSON.parse(
+          `{ "${req.query.type.toLowerCase()}": "${req.query.keyword}" }`
+      );
+      let result = await Item.find(filter);
+      res.status(200).json(result);
+  } catch (err) {
+      console.log(err);
+      res.status(500).send(err.message);
+  }
 });
 
-router.get('/search', (req, res, next) => {
+router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    let result;
     try {
-        //TODO
+        if(req.params.id.toLowerCase() == 'all'){
+            result = await Item.find({});
+            res.status(200).json({result});
+        }else{
+            result = await Item.findById(req.params.id);
+            res.status(200).json(result);
+        }
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -34,15 +44,14 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
     catch(err){
         res.status(500).json(err.message);
     }
-
 });
 
 router.post('/',passport.authenticate('jwt', {session: false}),
-
+    [
+        validateJSONHeaders
+    ],
     async (req, res) => {
         try{
-            console.log("here");
-            console.log(req.body);
             const item = await Item.create({...req.body});
             res.status(202).json({item});
         }
