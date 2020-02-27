@@ -47,7 +47,7 @@ router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, r
     }
 });
 
-router.get('/', passport.authenticate('jwt', {session: false}), async (req, res) =>{
+router.get('/', async (req, res) =>{
     try{
         const items = await Item.find({});
         res.status(200).json({items});
