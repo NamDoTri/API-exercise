@@ -32,7 +32,7 @@ router.get('/search', async (req, res, next) => {
   }
 });
 
-router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.get('/:id',  async (req, res) => {
     let result;
     try {
         if(!req.params.id || req.params.id.toLowerCase() == 'all'){
