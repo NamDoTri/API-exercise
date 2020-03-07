@@ -1,5 +1,6 @@
 require('dotenv').config();
-const app = require('express')();
+const express = require('express');
+const app = express();
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -9,9 +10,8 @@ const passport = require('passport');
 const passconfig = require("./config/passport");
 
 
-
-
         //middlewares
+        app.use(express.static('uploads'));
         app.use(passport.initialize());
         passconfig(passport);
         app.use(cp());
