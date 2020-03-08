@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  title: Marketplace API
+  version: '1.0'
+  description: 'Graded exercise '
+  contact:
+    name: Tri Nam Do
+    email: trinam9999@gmail.com
+servers:
+  - url: ec2-18-195-169-254.eu-central-1.compute.amazonaws.com
+    description: Tri Nam Do
+paths:
+  /users/register:
+    post:
+      summary: User registration
+      operationId: post-users-register
+      responses:
+        '200':
+          description: Email already registered
+        '202':
+          description: |-
+            New user created
+            Return information of the newly created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+      description: New user registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  /users/login:
+    post:
+      summary: User Login
+      operationId: post-users-login
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Login status
+                  token:
+                    type: string
+                    description: Bearer token
+        '404':
+          description: Email not registered
+        '500':
+          description: Internal Server Error
+      description: 'Login for registered users '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: ''
+  /items/search:
+    get:
+      summary: Search
+      tags: []
+      responses:
+        '200':
+          description: Return results
+        '500':
+          description: Internal Server Error
+      operationId: get-items
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - location
+              - category
+              - date
+          in: query
+          name: type
+          description: Criterion of search
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: keyword
+          description: Name of locations or categories or the date of posting
+      description: 'Search for item(s) based on category, location of date of posting'
+    parameters: []
+  /items/all:
+    get:
+      summary: List items
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      operationId: get-items-all
+      description: Return all items posted
+  '/items/:id':
+    get:
+      summary: Get an item
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal Server Error
+      operationId: 'get-items-:id'
+      description: Return one specific item with the given ID
+    put:
+      summary: Edit a posted item
+      operationId: 'put-items-:id'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal Server Error
+      description: Edit a posted item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+    delete:
+      summary: Delete an item
+      operationId: 'delete-items-:id'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal Server Error
+      description: Delete an item which has the given id
+      requestBody: {}
+  /items:
+    post:
+      summary: Post a new item
+      operationId: post-items
+      responses:
+        '202':
+          description: |-
+            Accepted - New item created
+            Return the newly created item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal Server Error
+      description: Post a new item for sale
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+    get:
+      summary: Get all items
+      operationId: get-items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '500':
+          description: Internal Server Error
+      description: Return all items
+  /items/bulk:
+    post:
+      summary: Post multiple items
+      operationId: post-items-bulk
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      description: Post multiple items simultaneously
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Item'
+            examples:
+              example-1: {}
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        password:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+      required:
+        - password
+        - email
+        - username
+    Item:
+      title: Item
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        location:
+          type: string
+        images:
+          type: array
+          items: {}
+        askingPrice:
+          type: number
+        dateOfPosting:
+          type: string
+        deliveryType:
+          type: string
+          default: Shipping
+          enum:
+            - Shipping
+            - Pickup
+        seller:
+          $ref: '#/components/schemas/User'
+      required:
+        - title
+        - description
+        - category
+        - location
+        - images
+        - askingPrice
+        - dateOfPosting
+        - deliveryType
+        - seller

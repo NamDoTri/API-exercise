@@ -1,11 +1,23 @@
 // import necessary packages/modules
 const router = require('express').Router();
-const Item = require('../models/Item');
+const Item = require('../models/item');
 const passport = require('passport');
-
+const multer = require('multer');
+const fs = require("fs");
 
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, './uploads');
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.fieldname}-${Date.now()}.jpg` );
+    }
+});
+
+const upload = multer({storage: storage});
 
 router.get('/search', async (req, res, next) => {
   try {
@@ -20,10 +32,10 @@ router.get('/search', async (req, res, next) => {
   }
 });
 
-router.get('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.get('/:id',  async (req, res) => {
     let result;
     try {
-        if(req.params.id.toLowerCase() == 'all'){
+        if(!req.params.id || req.params.id.toLowerCase() == 'all'){
             result = await Item.find({});
             res.status(200).json({result});
         }else{
@@ -46,13 +58,22 @@ router.get('/', async (req, res) =>{
     }
 });
 
-router.post('/',passport.authenticate('jwt', {session: false}),
-    [
-        validateJSONHeaders
-    ],
+router.post('/',
+    passport.authenticate('jwt', {session: false}),
+    upload.array("images", 4),
     async (req, res) => {
         try{
-            const item = await Item.create({...req.body});
+            let images = [];
+            req.files.forEach((f) => {
+                if(f.mimetype != "image/jpeg"){
+                    throw new Error("Invalid file format!")
+                }
+                fs.rename(f.path, './uploads/'+f.originalname, err => {
+                    if(err) throw err;
+                });
+                images.push('./uploads/'+f.originalname);
+            })
+            const item = await Item.create({...req.body, images});
             res.status(202).json({item});
         }
         catch(err){
