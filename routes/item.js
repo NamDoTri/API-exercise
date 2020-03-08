@@ -4,6 +4,9 @@ const Item = require('../models/item');
 const passport = require('passport');
 const multer = require('multer');
 const fs = require("fs");
+const uuid = require('uuid');
+const uuidv4 = uuid.v4;
+const path = require('path');
 
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
@@ -13,7 +16,7 @@ const storage = multer.diskStorage({
         callback(null, './uploads');
     },
     filename: (req, file, callback) => {
-        callback(null, `${file.fieldname}-${Date.now()}.jpg` );
+        callback(null, `${uuidv4()}.${path.extname(file.originalname)}` );
     }
 });
 
