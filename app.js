@@ -10,14 +10,30 @@ const passport = require('passport');
 const passconfig = require("./config/passport");
 
 
+/**
+ * {
+	"title": "title",
+	"description": "description",
+	"category": "category",
+	"location": "location",
+	"deliveryType": "Shipping",
+	"askingPrice": 908,
+	"seller": "5e6a45753fe5e84c97711cb5"	
+}
+ */
         //middlewares
-        app.use(express.static('uploads'));
+        
         app.use(passport.initialize());
         passconfig(passport);
         app.use(cp());
         app.use(bodyParser.urlencoded({extended: false}));
         app.use(bodyParser.json());
         app.use(cors());
+
+        app.use(express.static('uploads'));
+        app.use(express.static('public'));
+
+
         app.use((req,res,next) => {
             if (req.body) console.log(req.body);
             if (req.params) console.log(req.params);
