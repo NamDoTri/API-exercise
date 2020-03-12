@@ -11,16 +11,6 @@ const path = require('path');
 // validators for request
 const validateJSONHeaders = require('../validators/HeaderValidator');
 
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, './uploads');
-    },
-    filename: (req, file, callback) => {
-        callback(null, `${uuidv4()}.${path.extname(file.originalname)}` );
-    }
-});
-
-const upload = multer({storage: storage});
 
 router.get('/search', async (req, res, next) => {
   try {
@@ -65,7 +55,7 @@ router.post('/',
     passport.authenticate('jwt', {session: false}),
     async (req, res) => {
         try{
-            const item = await Item.create({...req.body, images});
+            const item = await Item.create({...req.body});
             res.status(202).json({item});
         }
         catch(err){
