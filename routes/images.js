@@ -35,6 +35,11 @@ const upload = multer({
 });
 
 router.post("/images", upload.single("images"), (req, res, next) => {
+  if(req.file){
+    console.log("file", req.file);
+  }else{
+    console.log(req);
+  }
   const filename = req.file.filename;
   //TODO
   res.status(202).json({
