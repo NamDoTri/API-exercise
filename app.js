@@ -33,6 +33,9 @@ const passconfig = require("./config/passport");
         const UserRoute = require("./routes/user");
         app.use('/users', UserRoute);
 
+        const ImagesRoute = require("./routes/images");
+        app.use("/uploads", ImagesRoute);
+
         app.get('/hi', passport.authenticate('jwt', {session: false}), (req, res) => {
             res.send('hi');
         })
