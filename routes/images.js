@@ -36,7 +36,7 @@ const upload = multer({
 
 router.post("/images", upload.single("images"), (req, res, next) => {
   if(req.file){
-    console.log("file", req.file);
+    console.log("file", req.file.path);
   }else{
     console.log(req);
   }
