@@ -63,16 +63,8 @@ router.get('/', async (req, res) =>{
 
 router.post('/',
     passport.authenticate('jwt', {session: false}),
-    upload.array("images", 4),
     async (req, res) => {
         try{
-            let images = [];
-            req.files.forEach((f) => {
-                fs.rename(f.path, './uploads/'+f.originalname, err => {
-                    if(err) throw err;
-                });
-                images.push('/uploads/'+f.originalname);
-            })
             const item = await Item.create({...req.body, images});
             res.status(202).json({item});
         }
@@ -120,6 +112,8 @@ router.delete('/:id', passport.authenticate('jwt', {session: false}), async (req
         res.status(500).send(err.message);
     }
 });
+
+
 
 
 
