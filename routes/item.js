@@ -105,7 +105,7 @@ router.post('/bulk', passport.authenticate('jwt', {session: false}), async (req,
 router.delete('/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         //TODO Check if seller id matches the one saved in the item
-        const item = await Item.deleteOne({id: req.params.id});
+        const item = await Item.deleteOne({_id: req.params.id});
         res.status(202).json({item});
     }
     catch(err){
