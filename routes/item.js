@@ -78,7 +78,7 @@ router.put('/:id',passport.authenticate('jwt', {session: false}),
    async (req, res) => {
        try{
            //TODO Check if seller id matches the one saved in the item
-           const item = await Item.updateOne({id: req.params.id}, {...req.body});
+           const item = await Item.updateOne({_id: req.params.id}, {...req.body});
            res.status(202).json({item});
        }
        catch(err){
