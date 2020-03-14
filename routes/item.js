@@ -25,7 +25,7 @@ const upload = multer({storage: storage});
 router.get('/search', async (req, res, next) => {
   try {
       let filter = JSON.parse(
-          `{ "${req.query.type.toLowerCase()}": "${req.query.keyword}" }`
+          `{ "${req.query.type}": "${req.query.keyword}" }`
       );
       let result = await Item.find(filter);
       res.status(200).json(result);
