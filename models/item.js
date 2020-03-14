@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    dateOfPosting: Date,
+    dateOfPosting: String,
     deliveryType: {
         type: String,
         enum: ['Shipping', 'Pickup'],
